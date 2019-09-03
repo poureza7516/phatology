@@ -39,14 +39,14 @@
                             <table class="table table-info table-striped">
                                 <tr>
 
+                                    <th >شماره</th>
                                     <th >نام</th>
-                                    <th >نتیجه</th>
-                                    <th >توضیحات</th>
+
                                 </tr>
                                 <tr >
+                                    <td id="id"></td>
                                     <td id="name"></td>
-                                    <td id="result"></td>
-                                    <td id="description"></td>
+
                                 </tr>
                             </table>
                         </div>
@@ -54,13 +54,64 @@
 
             {{----------------------------------------------js show test for enter results----------------------------------------------}}
                     <script>
-                        function show(){
-                            var reception_id=document.getElementById('reception-id').value;
+                        function show()
+                        {
+                            var reception_id = document.getElementById('reception-id').value;
+                            var url = 'http://localhost:8000/testindex?reception_id=' + reception_id;
+                            alert(url);
+                            fetch(url)
+                                .then(function(res)
+                                {
+                                    return res.json()
+                                })
+                                .then(function(data)
+                                {
+                                    ////////////////////////////////////////////////
+                                    document.getElementById('id').innerHTML = data.id;
+                                    document.getElementById('name').innerHTML = data.name;
+                                    ////////////////////////////////////////////////
+                                }
+                                    .then(res => res.json())
+                                 .then(data => alert(JSON.stringify(data))))
 
-
-                            alert(reception_id);
                         }
                     </script>
+
+
+            <script>
+                function disptest(){
+                    win=window.confirm('از ذخیره آزمایش مطمئن هستید؟');
+                    if(win)
+                    {
+                        var testname = document.getElementById("test-name").value;
+                        var para=document.createElement("tablerow");
+                        para.type='';
+                        para.name="test_name";
+                        para.className="tablerow"
+                        para.value=testname;
+                        document.getElementById("testshowname").appendChild(para);
+                        document.getElementById("testshowname").innerHTML += testname + '<br />';
+
+                        /////////////////////////////create test //////////////////////////////////////////
+                        // var test_name = document.getElementById('test-name').value;
+                        // var url = 'http://localhost:8000/createtest';
+                        // fetch(url, {
+                        //     method: 'POST',
+                        //     body: JSON.stringify({/*reception_id: reception_id ,*/ name: test_name}),
+                        //     headers: {
+                        //         'Content-Type': 'application/json',
+                        //         'Accept': 'application/json',
+                        //         "X-CSRF-Token": document.getElementById('csrf').value
+                        //     }
+                        // })
+                        //     .then(res => res.json())
+                        //     .then(data => alert(JSON.stringify(data)))
+                        //
+                        // //////////////////////////////////////////////////////////////////////
+
+                    }
+                }
+            </script>
 
             {{----------------------------------------------js show test for enter results----------------------------------------------}}
 

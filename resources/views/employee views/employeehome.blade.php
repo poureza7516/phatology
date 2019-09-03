@@ -104,75 +104,50 @@
                                                         <td id="testshowname"></td>
                                                     </tr>
                                                 </table>
-                                                <button id="edit" type="submit" class="btn btn-outline-secondary"  onclick="deletetestshow()">Delete</button>
                                             </div>
-                                                    <br>
-                                            <button id="confirm" type="submit" class="btn btn-outline-primary"  onclick="savetests">Save</button>
+
 
                                         </div>
                               </div>
 
         {{--///////////////////////////////new test detail show/////////////////////////////////////////////////////////////////////////////--}}
                             <script>
-                                function disptest() {
+                                function disptest(){
+                                    win=window.confirm('از ذخیره آزمایش مطمئن هستید؟');
+                                if(win)
+                                {
                                     var testname = document.getElementById("test-name").value;
-                                    var para=document.createElement("input");
-                                    para.type="checkbox";
+                                    var para=document.createElement("tablerow");
+                                    para.type='';
                                     para.name="test_name";
-                                    para.className="messageCheckbox"
+                                    para.className="tablerow"
                                     para.value=testname;
                                     document.getElementById("testshowname").appendChild(para);
                                     document.getElementById("testshowname").innerHTML += testname + '<br />';
 
                                     /////////////////////////////create test //////////////////////////////////////////
-                                    // var test_name = document.getElementById('test-name').value;
-                                    // var url = 'http://localhost:8000/createtest';
-                                    // fetch(url, {
-                                    //     method: 'POST',
-                                    //     body: JSON.stringify({reception_id: reception_id , name: test_name}),
-                                    //     headers: {
-                                    //         'Content-Type': 'application/json',
-                                    //         'Accept': 'application/json',
-                                    //         "X-CSRF-Token": document.getElementById('csrf').value
-                                    //     }
-                                    // })
-                                    //     .then(res => res.json())
-                                    //     .then(data => alert(JSON.stringify(data)))
+                                    var test_name = document.getElementById('test-name').value;
+                                    var url = 'http://localhost:8000/createtest';
+                                    fetch(url, {
+                                        method: 'POST',
+                                        body: JSON.stringify({/*reception_id: reception_id ,*/ name: test_name}),
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Accept': 'application/json',
+                                            "X-CSRF-Token": document.getElementById('csrf').value
+                                        }
+                                    })
+                                        .then(res => res.json())
+                                        .then(data => alert(JSON.stringify(data)))
                                     //
                                     // //////////////////////////////////////////////////////////////////////
 
-
+                                }
                                 }
                             </script>
 
 
                         </div>
-
-        {{--///////////////////////////////delete test/////////////////////////////////////////////////////////////////////////////--}}
-
-                <script>
-                    function deletetestshow() {
-                        var checkedValue=null;
-                        var inputElements=document.getElementsByClassName('messageCheckbox');
-
-
-
-                        for (let i=0;inputElements[i];++i)
-                        {
-
-                            if (inputElements[i].checked)
-                            {
-                                alert(inputElements[i].value);
-
-                               inputElements[i].value=null;
-                               break;
-                            }
-                        }
-                    }
-                </script>
-
-
-        {{--///////////////////////////////delete test/////////////////////////////////////////////////////////////////////////////--}}
 
 
         {{--/////////////////////////////js create new test function/////////////////////////////////////////////////////////////////////--}}
@@ -217,18 +192,17 @@
 
                 <div class="text" style=" margin-left: auto;" >
                     <label>تاریخ پذیرش</label>
-                    <input type="text" class="text-formControlName=" id="reception-date" name="reception_date">
+                    <input type="date" class="text-formControlName=" id="reception-date" name="reception-date">
                 </div>
-
 
                 <div class="text" style=" margin-left: auto;" >
                     <label>تاریخ جواب دهی</label>
-                    <input type="text" class="text-formControlName=" id="aswer-date" name="answer_date">
+                    <input type="date" class="text-formControlName=" id="answer-date" name="answer-date">
                 </div>
 
                 <div class="text" style=" margin-left: auto;" >
                     <label>دریافتی از بیمار</label>
-                    <input type="text" class="text-formControlName=" id="payment" name="answer_date">
+                    <input type="text" class="text-formControlName=" id="payment" name="payment" placeholder="هزینه آزمایش">
                 </div>
 
 
@@ -240,43 +214,58 @@
                         <option value="Result ready">دریافت نتیجه</option>
                     </select>
                 </div>
-                <a href="/createreception"> <button type="submit" class="btn btn-outline-info" id="submit" name="submit" onclick="">Enter</button>
-                </a>
+                 <button type="submit" class="btn btn-outline-info" id="submit" name="submit" onclick="create();recid();">Enter</button>
+
 
             </div>
         </div>
         </div>
-
-
-
-
 
                 {{--/////////////////////////////////js create new reception function ///////////////////////////////////////////////////--}}
 
                 <script>
                     var reception_id;
                     function create() {
-                        var user_id = document.getElementById('id').innerHTML;
-                        var reception_date = document.getElementById('reception-date').innerHTML;
-                        var answer_date = document.getElementById('answer-date').innerHTML;
-                        var status = document.getElementById('status').innerHTML;
-                        var payment = document.getElementById('payment').innerHTML;
-                        var url = 'http://localhost:8000/createreception';
-                        fetch(url, {
-                            method: 'POST',
-                            body: JSON.stringify({user_id: user_id ,reception_date:reception_date ,
-                                answer_date:answer_date ,status:status ,payment:payment}),
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                "X-CSRF-Token": document.getElementById('csrf').value
-                            }
-                        })
+
+                            var user_id = document.getElementById('id').innerHTML;
+                            var reception_date = document.getElementById('reception-date').value;
+                            var answer_date = document.getElementById('answer-date').value;
+                            var status = document.getElementById('status').value;
+                            var payment = document.getElementById('payment').value;
+                            var url = 'http://localhost:8000/createreception';
+                            fetch(url, {
+                                method: 'POST',
+                                body: JSON.stringify({
+                                    user_id: user_id, reception_date: reception_date,
+                                    answer_date: answer_date, status: status, payment: payment
+                                }),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    "X-CSRF-Token": document.getElementById('csrf').value
+                                }
+                            })
                             .then(res => res.json())
                             .then(data => {
                                 reception_id = data['id'];
+
                             })
+
                     }
+                    // function recid() {
+                    //
+                    //     var url = 'http://localhost:8000/curentreception;'
+                    //     console.log(url);
+                    //     fetch(url)
+                    //         .then(function(res) {
+                    //             return res.json()
+                    //         })
+                    //         .then(function(data) {
+                    //             ////////////////////////////////////////////////
+                    //             reception_id = data.id;
+                    //             ////////////////////////////////////////////////
+                    //         },alert(reception_id));
+                    // }
                 </script>
 
                 {{--/////////////////////////////////js create new reception function ///////////////////////////////////////////////////--}}

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class ReceptionController extends Controller
 {
+
     public function createreception(Request $request)
     {
         $reception=new Reception();
@@ -16,5 +17,6 @@ class ReceptionController extends Controller
         $reception->status=$request->input('status');
         $reception->payment=$request->input('payment');
         $reception->save();
+        $temp=$reception;
     }
 }

@@ -36,7 +36,9 @@ Route::get('/employeehome/search','HomeController@search');
 
 
 Route::post('/createtest','TestController@createTest');
+Route::get('/testindex','TestController@search');
 
 Route::post('/createreception','ReceptionController@createreception');
+Route::get('/curentreception','ReceptionController@curentreception');
 
 
