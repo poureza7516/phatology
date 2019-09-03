@@ -36,7 +36,7 @@
                                     <td id="gender"></td>
                                 </tr>
                             </table>
-                            <button id="edit" type="submit" class="btn btn-outline-secondary"  onclick="//edit()">Delete</button>
+                            {{--<button id="edit" type="submit" class="btn btn-outline-secondary"  onclick="//edit()">Delete</button>--}}
                         </div>
                     </div>
                 </div>

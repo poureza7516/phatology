@@ -16,13 +16,15 @@ class TestController extends Controller
         {
             if($test->reception_id == $reception_id)
             {
-                return $test;
-                break;
+                $record[]=$test;
             }
-            else $test='Not found';
+             else
+                 return 'Not found';
         }
-        return view('\employee views\Patient',compact('test'));
+        return $record;
     }
+
+
 
 
     public function createTest(Request $request)

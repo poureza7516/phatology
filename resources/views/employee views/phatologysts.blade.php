@@ -31,7 +31,7 @@
                             <label>شماره پذیرش را وارد کنید</label>
                             <input type="text" name="reception_id" id="reception-id">
                             <hr>
-                            <button type="submit" class="btn-outline-info" onclick="show();">جستجو</button>
+                            <button type="submit" class="btn-outline-info" onclick="">جستجو</button>
                         </div>
 
                         <div  class="card card-text">
@@ -53,29 +53,7 @@
                     </div>
 
             {{----------------------------------------------js show test for enter results----------------------------------------------}}
-                    <script>
-                        function show()
-                        {
-                            var reception_id = document.getElementById('reception-id').value;
-                            var url = 'http://localhost:8000/testindex?reception_id=' + reception_id;
-                            alert(url);
-                            fetch(url)
-                                .then(function(res)
-                                {
-                                    return res.json()
-                                })
-                                .then(function(data)
-                                {
-                                    ////////////////////////////////////////////////
-                                    document.getElementById('id').innerHTML = data.id;
-                                    document.getElementById('name').innerHTML = data.name;
-                                    ////////////////////////////////////////////////
-                                }
-                                    .then(res => res.json())
-                                 .then(data => alert(JSON.stringify(data))))
 
-                        }
-                    </script>
 
 
             <script>
@@ -142,7 +120,7 @@
                     <hr>
                     <div class="card-body">
                         <label>شماره پذیرش</label>
-                        <input type="text" name="reception_id" id="reception-id">
+                        <input type="text" name="reception_id" id="receptionid">
                         <hr>
                         <button type="submit" class="btn-outline-info" onclick="showresult();">جستجو</button>
                     </div>
@@ -167,6 +145,34 @@
                 </div>
             </div>
         </div>
+
+
+        {{--------------------------------------------------------js show result --------------------------------------------}}
+
+        <script>
+            function showresult()
+            {
+                var reception_id = document.getElementById('receptionid').value;
+                var url = 'http://localhost:8000/testindex?reception_id=' + reception_id;
+                alert(url);
+                fetch(url)
+                    .then(function(res)
+                    {
+                        return res.json()
+                    })
+                    .then(function(data)
+                    {
+                        ////////////////////////////////////////////////
+                        document.getElementById('id').innerHTML = data.id;
+                        document.getElementById('name').innerHTML = data.name;
+                        ////////////////////////////////////////////////
+                    }
+                        .then(res => res.json())
+                        .then(data => alert(JSON.stringify(data))))
+
+            }
+        </script>
+        {{--------------------------------------------------------js show result --------------------------------------------}}
 
 
         {{--///////////////////////////////////////namayesh natije/////////////////////////////////////////////////////////////--}}
