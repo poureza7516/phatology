@@ -2,47 +2,46 @@
 
 @section('content')
 
+    <div style="font-family: 'B Nazanin'; font-size: medium;">
+            {{--///////////////////////////////////////namayesh natije/////////////////////////////////////////////////////////////--}}
 
+            <div class="modal-sm">
+                <div class="position-absolute" style="left: 7%;top: 10.5%;">
+                    <div class="card card-body">
+                        <div class="card card-header">
+                            <label>نمایش نتایج</label>
+                        </div>
+                        <hr>
+                        <div class="card card-body">
+                            <label>شماره پذیرش</label>
+                            <input type="text" name="reception_id" id="receptionid">
+                            <hr>
+                            <button type="submit" class="btn btn-outline-info" onclick="showresult();">جستجو</button>
+                            <hr>
+                            <button type="submit" class="btn btn-outline-info" onclick="print();">چاپ</button>
+                            <br>
+                        </div>
 
-        <div style="font-family: 'B Nazanin'; font-size: medium;">
+                        <div  class="card card-body" id="printable">
 
-
-            <div class="position-absolute" style="left: 5%;top: 10.5%;">
-                <div class="card card-header">
-                    <label>دریافت نتیجه آزمایش</label>
-                </div>
-
-                <div class="card card-body">
-                    <label>شماره پذیرش را وارد کنید</label>
-                    <input type="text" id="reception-id" name="reception_id" >
-                    <hr>
-                    <button class="btn-outline-success" onclick="showrecords();">دریافت نتیجه </button>
-                    <button id="edit" type="submit" class="btn btn-outline-secondary"  onclick="//print()">Print</button>
-
-                </div>
-            </div>
-
-
-            {{--////////////////////////////show result//////////////////////////////////////////////////--}}
-                <div class="position-absolute" style="left: 60%;top:10.5%;">
-
-                        <div  class="table table-responsive">
-
-                            <table class="table table-info table-striped">
+                            <table  cellpadding="7" border="1" class="table table-info table-striped" id="testtableshow">
                                 <tr>
-                                    <th>نام آزمایش</th>
+                                    <th>شماره</th>
+                                    <th >نام</th>
                                     <th >نتیجه</th>
                                     <th >توضیحات</th>
                                 </tr>
                                 <tr >
+                                    <td id="id"></td>
                                     <td id="name"></td>
                                     <td id="result"></td>
                                     <td id="description"></td>
                                 </tr>
                             </table>
-
                         </div>
-                  </div>
+                    </div>
+                </div>
+            </div>
 
                 {{--////////////////////////////////////show result//////////////////////////////////////////////////--}}
 
@@ -51,49 +50,79 @@
 
             {{--////////////////////////////js show tests function///////////////////////////////////////--}}
             <script>
-                function showtest() {
 
-                        var receptionid = document.getElementById('reception-id').value;
-                        // const url = 'http://localhost:8000/employeehome/search?national_id=' + national;
-                        console.log(url);
-                        fetch(url)
-                            .then(function(res) {
-                                return res.json()
-                            })
-                            .then(function(data) {
-                                ////////////////////////////////////////////////
-                                document.getElementById('name').innerHTML = data.name;
-                                document.getElementById('result').innerHTML = data.result;
-                                document.getElementById('description').innerHTML = data.description;
-
-                                ////////////////////////////////////////////////
-                            }, err=>alert('ابتدا ثبت نام کنید'))
+                function showresult()
+                {
+                    var reception_id = document.getElementById('receptionid').value;
+                    var url = 'http://localhost:8000/testindex?reception_id=' + reception_id;
+                    fetch(url).then(res=>res.json())
+                        .then(data=>{
+                            var t = document.getElementById('testtableshow');
+                            for ( var d of data ) {
+                                t.innerHTML += "<tr><td>"+ d['id'] + "</td><td>" + d['name'] + "</td><td>"+d['result']+"</td><td>"+d['description']+"</td></tr>";
+                            }
+                        })
 
                 }
+
+                function print()
+                {
+                     var content=document.getElementById('printable');
+                    newWin= window.open("");
+                    newWin.document.write(content.outerHTML);
+                    newWin.print();
+                    newWin.close();
+                }
+
             </script>
 
             {{--////////////////////////////js show tests function///////////////////////////////////////--}}
 
 
             {{----------------------show records ------------------------------------------------------------}}
-            <div class="position-absolute" style="left: 30%;top:10.5%;">
+            <div class="position-absolute" style="left: 60%;top:10.5%;">
 
-                <div  class="table table-responsive">
 
-                    <table class="table table-info table-striped">
-                        <tr>
-                            <th>تاریخ انجام آزمایش</th>
-                            <th >شماره پذیرش</th>
-                        </tr>
-                        <tr >
-                            <td id="reception_date"></td>
-                            <td id="reception_id"></td>
-                        </tr>
-                    </table>
+                        <div class="card card-body">
+                            <div class="card card-header">
+                                <label>سوابق آزمایشگاهی</label>
+                            </div>
+                            <hr>
+                            <div  class="card card-body">
 
+                                <table cellpadding="5" class="table table-info table-striped" id="recordtableshow">
+                                    <tr>
+                                        <th>شماره پذیرش</th>
+                                        <th >تاریخ انجام آزمایش</th>
+                                        <th >وضعیت</th>
+                                    </tr>
+                                    <tr >
+                                        <td id="id"></td>
+                                        <td id="reception_date"></td>
+                                        <td id="status"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                 </div>
-            </div>
 
+
+
+
+                <script>
+                    function showRecords()
+                    {
+                        var url = 'http://localhost:8000/indexreceptions';
+                        fetch(url).then(res=>res.json())
+                            .then(data=>{
+                                var t = document.getElementById('recordtableshow');
+                                for ( var d of data ) {
+                                    t.innerHTML += "<tr><td>"+ d['id'] + "</td><td>" + d['reception_date'] + "</td><td>"+d['status']+"</td></tr>";
+                                }
+                            })
+                    }
+                    window.onload=showRecords();
+                </script>
 
             {{----------------------show records ------------------------------------------------------------}}
 

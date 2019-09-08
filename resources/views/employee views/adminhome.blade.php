@@ -54,13 +54,19 @@
                         return res.json()
                     })
                     .then(function(data) {
-                        ////////////////////////////////////////////////
-                        document.getElementById('id').innerHTML = data.id;
-                        document.getElementById('name').innerHTML = data.name;
-                        document.getElementById('phone').innerHTML = data.phone;
-                        document.getElementById('gender').innerHTML = data.gender;
-                        document.getElementById('national-id').innerHTML = data.national_id;
-                        ////////////////////////////////////////////////
+                        if (data.type =='employee') {
+                            ////////////////////////////////////////////////
+                            document.getElementById('id').innerHTML = data.id;
+                            document.getElementById('name').innerHTML = data.name;
+                            document.getElementById('phone').innerHTML = data.phone;
+                            document.getElementById('gender').innerHTML = data.gender;
+                            document.getElementById('national-id').innerHTML = data.national_id;
+                            ////////////////////////////////////////////////
+                        }
+                        else {
+                            alert('کارمند مورد نظر یافت نشد');
+                        }
+
                     }, err=>alert('ابتدا ثبت نام کنید'))
 
 
@@ -102,12 +108,56 @@
                      <div class="card-header">
                          <label>گزارش گیری</label>
                      </div>
-                     <select>
+                     <div class="card-body">
+                         <label for="start">تاریخ شروع</label>
+                         <input type="date" name="start" id="start">
+                         <label for="end">تاریخ پایان</label>
+                         <input type="date" name="end" id="end">
+                     </div>
+                     <select id="type">
                          <option value="earning">درآمد کل ماه</option>
-                         <option value="earning">کل آزمایشات انجام شده</option>
+                         <option value="testsum">کل پذیرش های انجام شده</option>
                      </select>
+                     <hr>
+                     <button type="submit" class="btn btn-outline-info" onclick="report();">OK</button>
                  </div>
             </div>
+
+        {{---------------------------------------js report show function-------------------------------------}}
+        <script>
+            function report()
+            {
+                var start=document.getElementById('start').value;
+                var end=document.getElementById('end').value;
+                var receptioncount='http://localhost:8000/report/receptioncount?start'+start+'&end='+end;
+                var payment='http://localhost:8000/report/payment?start='+start+'&end='+end;
+                var sta=document.getElementById('type').value;
+                if (sta=='earning')
+                {
+                    fetch(payment)
+                        .then(function(res) {
+                            return res.json()
+                        })
+                        .then(function(data) {
+                            window.alert('مجموعه دریافتی از تاریخ\n'+start+'\nتا تاریخ \n'+end+'\n برابر است با : '+data);
+
+                        })
+                }
+                if (sta=='testsum')
+                {
+                    fetch(receptioncount)
+                        .then(function(res) {
+                            return res.json()
+                        })
+                        .then(function(data) {
+                            window.alert('مجموعه آزمایشات انجام شده از تاریخ\n'+start+'\nتا تاریخ \n'+end+'\n برابر است با : '+data);
+
+                        })
+                }
+
+            }
+        </script>
+        {{---------------------------------------js report show function-------------------------------------}}
 
         {{--///////////////////////////////////////// reporting section///////////////////////////////////////////--}}
 

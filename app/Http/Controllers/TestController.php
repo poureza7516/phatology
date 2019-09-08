@@ -31,21 +31,19 @@ class TestController extends Controller
     {
         $test=new Test();
         $test->name=$request->input('name');
-        $test->reception_id=1;//$request->input('reception_id');
+        $test->reception_id=$request->input('reception_id');
         $test->save();
+        return $test;
     }
 
-    public function updatetests(Request $request,Test $test)
+///////////////////////////seyed nvis/////////////////////////////
+    public function updatetest(Request $request)
     {
-        $tests=Test::all();
-        foreach ($tests as $test)
-        {
-            if ($test->reception_id == $request->input('reception_id'))
-            {
-                $test->result=$request->input("result");
-                $test->result=$request->input("description");
-                $test->update();
-            }
-        }
+        $test = Test::find($request->input('id'));
+        $test->result = $request->input('result');
+        $test->description = $request->input('description');
+        $test->save();
+        return $test;
     }
+    ////////////////////////////////////////////////////////////
 }

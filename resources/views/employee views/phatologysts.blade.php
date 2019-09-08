@@ -12,122 +12,70 @@
                     </div>
                     <hr>
                     <a href="/employeehome">
-                        <button class="btn-outline-primary">ورود به صفحه پذیرش</button>
+                        <button class="btn btn-outline-primary">ورود به صفحه پذیرش</button>
                     </a>
-
                 </div>
             </div>
         </div>
 
-
         {{-----//////////////////////////////////////redirect to reception page///////////////////////////////////////////////////////--}}
 
-        <div class="position-absolute" style="left: 5%;top: 10.5%;" >
+        <div class="position-absolute" style="left: 1%;top: 10.5%;" >
 
-                    <div class="card card-body">
-                        <div class="card-header">ثبت نتایج</div>
-                        <hr>
-                        <div class="card-body">
-                            <label>شماره پذیرش را وارد کنید</label>
-                            <input type="text" name="reception_id" id="reception-id">
-                            <hr>
-                            <button type="submit" class="btn-outline-info" onclick="">جستجو</button>
-                        </div>
+            <div class="card card-body">
+                <div class="card-header">ثبت نتایج</div>
+                <hr>
+                <div class="card card-body">
+                    <label>شماره پذیرش را وارد کنید</label>
+                    <input type="text" name="reception_id" id="reception-id">
+                    <input id="csrf" type="hidden" name="__token" value={{csrf_token()}} >
+                    <hr>
+                    <button type="submit" class="btn btn-outline-info" onclick="reception()">جستجو</button>
+                </div>
 
-                        <div  class="card card-text">
+                <div  class="card card-text">
 
-                            <table class="table table-info table-striped">
-                                <tr>
+                    <table id="testtable" class="table table-info table-striped">
+                        <tr>
 
-                                    <th >شماره</th>
-                                    <th >نام</th>
+                            <th>شماره</th>
+                            <th>نام</th>
+                            <td>نتیجه</td>
+                            <td>توضیحات</td>
 
-                                </tr>
-                                <tr >
-                                    <td id="id"></td>
-                                    <td id="name"></td>
-
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-
-            {{----------------------------------------------js show test for enter results----------------------------------------------}}
-
-
-
-            <script>
-                function disptest(){
-                    win=window.confirm('از ذخیره آزمایش مطمئن هستید؟');
-                    if(win)
-                    {
-                        var testname = document.getElementById("test-name").value;
-                        var para=document.createElement("tablerow");
-                        para.type='';
-                        para.name="test_name";
-                        para.className="tablerow"
-                        para.value=testname;
-                        document.getElementById("testshowname").appendChild(para);
-                        document.getElementById("testshowname").innerHTML += testname + '<br />';
-
-                        /////////////////////////////create test //////////////////////////////////////////
-                        // var test_name = document.getElementById('test-name').value;
-                        // var url = 'http://localhost:8000/createtest';
-                        // fetch(url, {
-                        //     method: 'POST',
-                        //     body: JSON.stringify({/*reception_id: reception_id ,*/ name: test_name}),
-                        //     headers: {
-                        //         'Content-Type': 'application/json',
-                        //         'Accept': 'application/json',
-                        //         "X-CSRF-Token": document.getElementById('csrf').value
-                        //     }
-                        // })
-                        //     .then(res => res.json())
-                        //     .then(data => alert(JSON.stringify(data)))
-                        //
-                        // //////////////////////////////////////////////////////////////////////
-
-                    }
-                }
-            </script>
-
-            {{----------------------------------------------js show test for enter results----------------------------------------------}}
+                        </tr>
+                        <tr>
+                            <td id="id"></td>
+                            <td id="name"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
 
 
-            {{--<div class="card">--}}
-                        {{--<div class="card-header">همه سوابق بیمار</div>--}}
-                        {{--<hr>--}}
-                        {{--<div class="card-body">--}}
-                            {{--<label>شماره ملی را وارد کنید</label>--}}
-                            {{--<input type="text" name="national_id" id="national-id">--}}
-                            {{--<hr>--}}
-                            {{--<button type="submit" class="btn-outline-info">جستجو</button>--}}
-
-                        {{--</div>--}}
-                    {{--</div>--}}
 
         </div>
 
         {{--///////////////////////////////////////namayesh natije/////////////////////////////////////////////////////////////--}}
 
         <div class="modal-sm">
-            <div class="position-absolute" style="left: 40%;top: 10.5%;">
+            <div class="position-absolute" style="left: 50%;top: 10.5%;">
                 <div class="card card-body">
                     <div class="card card-header">
                         <label>نمایش نتایج</label>
                     </div>
                     <hr>
-                    <div class="card-body">
+                    <div class="card card-body">
                         <label>شماره پذیرش</label>
                         <input type="text" name="reception_id" id="receptionid">
                         <hr>
-                        <button type="submit" class="btn-outline-info" onclick="showresult();">جستجو</button>
+                        <button type="submit" class="btn btn-outline-info" onclick="showresult();">جستجو</button>
                     </div>
 
                     <div  class="card card-text">
 
-                        <table class="table table-info table-striped">
+                        <table border="1" cellpadding="7" class="table table-info table-striped" id="testtableshow">
                             <tr>
                                 <th>شماره</th>
                                 <th >نام</th>
@@ -142,10 +90,38 @@
                             </tr>
                         </table>
                     </div>
+                    <button type="submit" class="btn btn-outline-info" onclick="print();">چاپ</button>
                 </div>
             </div>
         </div>
+        <script>
+            function print()
+            {
+                var content=document.getElementById('testtableshow');
+                newWin= window.open("");
+                newWin.document.write(content.outerHTML);
+                newWin.print();
+                newWin.close();
+            }
 
+        </script>
+
+        <script>
+            function reception()
+            {
+                var reception_id = document.getElementById('reception-id').value;
+
+                var url = 'http://localhost:8000/testsearch?reception_id=' + reception_id;
+                fetch(url).then(res=>res.json())
+                    .then(data=>{
+                        var t = document.getElementById('testtable');
+                        for ( var d of data ) {
+                            t.innerHTML += "<tr><td>"+ d['id'] + "</td><td>" + d['name'] + "</td><td><input type='text' id='result"+d['id'] +"'/></td><td><input type='text' id='description" + d['id'] +"'/</td>"
+                                +"<td><button class='btn btn-outline-info' onclick='submittest(" + d['id']+")'>save</button></td></tr>";
+                        }
+                    })
+            }
+        </script>
 
         {{--------------------------------------------------------js show result --------------------------------------------}}
 
@@ -154,22 +130,36 @@
             {
                 var reception_id = document.getElementById('receptionid').value;
                 var url = 'http://localhost:8000/testindex?reception_id=' + reception_id;
-                alert(url);
-                fetch(url)
-                    .then(function(res)
-                    {
-                        return res.json()
+                fetch(url).then(res=>res.json())
+                    .then(data=>{
+                        var t = document.getElementById('testtableshow');
+                        for ( var d of data ) {
+                            t.innerHTML += "<tr><td>"+ d['id'] + "</td><td>" + d['name'] + "</td><td>"+d['result']+"</td><td>"+d['description']+"</td></tr>";
+                        }
                     })
-                    .then(function(data)
-                    {
-                        ////////////////////////////////////////////////
-                        document.getElementById('id').innerHTML = data.id;
-                        document.getElementById('name').innerHTML = data.name;
-                        ////////////////////////////////////////////////
-                    }
-                        .then(res => res.json())
-                        .then(data => alert(JSON.stringify(data))))
 
+            }
+        </script>
+
+        {{---------------------------------------------------------------------------------------------------------------}}
+        <script>
+            function submittest(id) {
+                var result = document.getElementById('result' + id).value;
+                var description = document.getElementById('description'+id).value;
+                var url = 'http://localhost:8000/updatetest';
+                fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify({id: id, result: result, description: description}),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        "X-CSRF-Token": document.getElementById('csrf').value
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        alert( 'ثبت شد' );
+                    })
             }
         </script>
         {{--------------------------------------------------------js show result --------------------------------------------}}

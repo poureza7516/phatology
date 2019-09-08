@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reception;
+use App\User;
 use Illuminate\Http\Request;
 
 class ReceptionController extends Controller
@@ -17,6 +18,52 @@ class ReceptionController extends Controller
         $reception->status=$request->input('status');
         $reception->payment=$request->input('payment');
         $reception->save();
-        $temp=$reception;
+        $temp= $reception;
+        return $temp;
     }
+
+    public function showReceptions(Request $request)
+    {
+        $receptions=Reception::all();
+        $user=auth()->user();
+
+        foreach ($receptions as $reception)
+        {
+            if ($reception->user_id == $user->id)
+            {
+                $records[]=$reception;
+            }
+        }
+        return $records;
+    }
+
+
+    public function payment(Request $request)
+    {
+        $total_payment=0;
+        $receptions=Reception::all();
+        foreach ($receptions as $reception)
+        {
+            if($reception->reception_date >=$request->input('start') && $reception->reception_date <=$request->input('end') )
+            {
+                $total_payment+=$reception->payment;
+            }
+        }
+        return $total_payment;
+    }
+
+
+    public function receptioncount(Request $request)
+    {
+        $total_count=0;
+        $receptions=Reception::all();
+        foreach ($receptions as $reception) {
+            if ($reception->reception_date >= $request->input('start') && $reception->reception_date <= $request->input('end'))
+            {
+                $total_count++;
+            }
+        }
+        return $total_count;
+    }
+
 }
