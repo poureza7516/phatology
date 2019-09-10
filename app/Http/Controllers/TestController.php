@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Test;
+use App\Reception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TestController extends Controller
 {
@@ -11,16 +13,14 @@ class TestController extends Controller
     public function search(Request $request,Test $test)
     {
         $reception_id=$request->input('reception_id');
-        $tests=Test::all();
-        foreach ($tests as $test)
-        {
-            if($test->reception_id == $reception_id)
-            {
-                $record[]=$test;
+
+            $tests = Test::all();
+            foreach ($tests as $test) {
+                if ($test->reception_id == $reception_id) {
+                    $record[] = $test;
+                }
             }
-             else
-                 return 'Not found';
-        }
+
         return $record;
     }
 

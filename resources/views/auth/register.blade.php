@@ -1,7 +1,10 @@
-@extends('layouts.app')
+{{--@extends('layouts.app')--}}
 
-@section('content')
-<div class="container">
+{{--@section('content')--}}
+
+@extends('adminp.y')
+@section('ss')
+<div class="container " style="top:20%;left:15%;">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -121,6 +124,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
+                                <button href="" class="btn btn-primary">Cancel</button>
                             </div>
                         </div>
                     </form>

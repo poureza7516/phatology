@@ -50,21 +50,21 @@ class HomeController extends Controller
 //////////////////////////////////////////////////redirecting /////////////////
     public function index()
     {
-        return view('home');
+        return view('\adminp\patientmaster');
     }
     public function indexemployee()
     {
-        return view('\employee views\employeehome');
+        return view('\adminp\master');
     }
 
 
     public function indexphatologsts()
     {
-        return view('\employee views\phatologysts');
+        return view('\adminp\resultmaster');
     }
 
     public function indexadmin()
     {
-        return view('\employee views\adminhome');
+        return view('\adminp\adminmaster');
     }
 }

@@ -47,10 +47,11 @@ class RegisterController extends Controller
             default:
                 return '/employeehome';
         }
-
-
-//        return 'nashod';
     }
+
+//
+////        return 'nashod';
+//    }
     /// ////////////////////////////////////////////
 
     /**

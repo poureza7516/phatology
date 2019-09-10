@@ -22,6 +22,7 @@ Route::get('/logout','LogoutCotroller@logout');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
 Route::get('/employeehome','HomeController@indexemployee');
 
 
@@ -46,6 +47,13 @@ Route::post('updatetest', 'TestController@updatetest');
 Route::post('/createreception','ReceptionController@createreception');
 Route::get('/indexreceptions','ReceptionController@showReceptions');
 
+
+
 Route::get('/report/payment','ReceptionController@payment');
 Route::get('/report/receptioncount','ReceptionController@receptioncount');
+
+Route::get('/userindex','UserController@index');
+Route::get('/userdelete','UserController@drop');
+
+Route::get('/statuschange','receptionController@update');
 

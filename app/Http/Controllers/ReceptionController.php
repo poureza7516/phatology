@@ -66,4 +66,13 @@ class ReceptionController extends Controller
         return $total_count;
     }
 
+
+    public function update(Request $request)
+    {
+        $reception=Reception::find($request->input('id'));
+        $reception->status='ready';
+        $reception->save();
+        return 1;
+    }
+
 }
